@@ -37,7 +37,7 @@ export default {
       isShow: true,
       word1: '我',
       word2: '你',
-      fontSize: 12
+      fontSize: 18
     }
   }, methods: {
     getRandomChineseWord() {
