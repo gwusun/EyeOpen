@@ -1,9 +1,25 @@
 <template>
-  <div v-on:keyup.esc="alert(1)">
-    <a-row :style="'text-align: center;font-size: '+fontSize+'px'">
+  <div style="text-align: center;width: 100%;margin: 0 auto;">
+    <a-button @click="mode=!mode" style="position: absolute;left:0;bottom: 0;z-index: 9999">MODE</a-button>
+    <div :style="'width:'+windowWidth+'px' " v-if="mode">
+      <div style="width: 100%;margin: 0 auto;text-align: center;">
+        <div
+            :style="'margin:0 auto; width: '+circleWidth+'px;height: '+circleWidth+'px;border-radius: 50%;border: 10px solid rgb('+rgbValue+','+rgbValue2+','+rgbValue3+');'">
+          <span :style="'fontSize:'+(circleWidth-circleWidth*0.4)+'px;'">唟</span>
+        </div>
+      </div>
+
+    </div>
+    <a-row :style="'text-align: center;font-size: '+fontSize+'px'" v-else>
+
+      <a-col :span="24" style="text-align: center;">
+
+      </a-col>
       <a-col :span="24">
         <a-button type="primary" style="margin: 0 10px;" size="small" @click="changeWord">改变文字</a-button>
-        <a-button type="primary" style="margin: 0 10px;" size="small" @click="isShowWords=!isShowWords">{{ !isShowWords?"显示":"隐藏" }}上一组文字</a-button>
+        <a-button type="primary" style="margin: 0 10px;" size="small" @click="isShowWords=!isShowWords">
+          {{ !isShowWords ? "显示" : "隐藏" }}上一组文字
+        </a-button>
         <a-button type="primary" style="margin: 0 10px;" size="small" @click="fontSize++">加大文字</a-button>
         <a-button type="primary" style="margin: 0 10px;" size="small" @click="fontSize--">减少文字</a-button>
       </a-col>
@@ -37,11 +53,42 @@ export default {
   props: {
     msg: String
   }, created() {
+    let isUp = true;
+    this.windowWidth = document.body.clientWidth;
     document.addEventListener('keydown', this.handleKeyDown)
     document.addEventListener('keyup', this.handleKeyUp)
+    setInterval(() => {
+
+
+      if (isUp) {
+        this.circleWidth += 1;
+      } else {
+        this.circleWidth -= 1;
+      }
+      if (this.circleWidth > document.body.clientHeight) {
+        isUp = false;
+      } else if (this.circleWidth < 100) {
+        isUp = true;
+      }
+
+    }, 2)
+    setInterval(() => {
+      this.rgbValue = Math.ceil(Math.random() * 256);
+      this.rgbValue2 = Math.ceil(Math.random() * 256);
+      this.rgbValue3 = Math.ceil(Math.random() * 256);
+    }, 500)
+  },
+  computed: {
+
   },
   data() {
     return {
+      windowWidth:100,
+      mode: true,
+      rgbValue: 0,
+      rgbValue2: 0,
+      rgbValue3: 0,
+      circleWidth: 100,
       isShowWords: true,
       word1: '我',
       word2: '你',
